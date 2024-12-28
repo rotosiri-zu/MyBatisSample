@@ -34,7 +34,7 @@ public class BookController {
 	@GetMapping("/detail/{id}")
 	public String showBook(@PathVariable int id, Model model) {
 		model.addAttribute("message", "詳細表示");
-		model.addAttribute("book", bookMapper.getBookByID(id));
+		model.addAttribute("book", bookMapper.getBookById(id));
 		return "book/success";
 	}
 	
