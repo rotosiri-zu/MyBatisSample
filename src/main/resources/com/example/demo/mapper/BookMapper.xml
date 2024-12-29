@@ -2,25 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.BookMapper">
 	<!-- 【SELECT】全ての書籍を取得するためのSQLを定義 -->
-	<select id="getAllBooks"
-		resultMap="BookWithPublisherResult">
-		SELECT 
-			b.id, b.title, b.author,
-			p.id as publisher_id, p.name as publisher_name
+	<select id="getAllBooks" resultMap="BookWithPublisherResult">
+		SELECT
+		b.id, b.title, b.author,
+		p.id as publisher_id, p.name as publisher_name
 		FROM books b
-		INNER JOIN publishers p ON b.publisher_id = p.id
+		INNER JOIN
+		publishers p ON b.publisher_id = p.id
 		ORDER BY b.id
 	</select>
 
 	<!-- 【SELECT】特定のIDを持つ書籍を取得するためのSQLを定義 -->
-	<select id="getBookById"
-		resultMap="BookWithPublisherResult">
-		SELECT 
-			b.id, b.title, b.author, b.publisher_id,
-			r.id as review_id, r.book_id, r.review_text
-			FROM books b
-			INNER JOIN reviews r ON b.id = r.book_id
-			WHERE b.id = #{id}
+	<select id="getBookById" resultMap="BookWithReviewsResult">
+		SELECT
+		b.id, b.title, b.author, b.publisher_id,
+		r.id as review_id, r.book_id, r.review_text
+		FROM books b
+		INNER JOIN reviews r ON b.id = r.book_id
+		WHERE b.id = #{id}
 	</select>
 
 	<!-- 【INSERT】新しい書籍をデータベースに追加するSQLを定義 -->
@@ -54,14 +53,14 @@
 			<result property="name" column="publisher_name" />
 		</association>
 	</resultMap>
-	<!-- 書籍とレビューの1対多の関係 -->
-	<resultMap id="BookWithPublisherResult"
+	<resultMap id="BookWithReviewsResult"
 		type="com.example.demo.entity.Book">
 		<id property="id" column="id" />
 		<result property="title" column="title" />
 		<result property="author" column="author" />
-		<collection property="reviews" ofType="com.example.demo.entity.Review">
-			<id property="id" column="book_id" />
+		<collection property="reviews"
+			ofType="com.example.demo.entity.Review">
+			<id property="id" column="review_id" />
 			<result property="bookId" column="book_id" />
 			<result property="reviewText" column="review_text" />
 		</collection>
